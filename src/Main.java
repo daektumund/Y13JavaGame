@@ -12,9 +12,14 @@ public class Main extends Thread{
                 if (canvas.keyInput.diveRoll){
                     canvas.keyInput.drt++;
                     System.out.println("diveroll");
+                } else {
+                    canvas.keyInput.drot++;
                 }
-                if (canvas.keyInput.drt == 30){
+                if (canvas.keyInput.drt == 10){
                     canvas.keyInput.diveRoll = false;
+                }
+                if (canvas.keyInput.drot == 10){
+                    canvas.keyInput.canDiveRoll = true;
                 }
             }
         }

@@ -2,9 +2,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyInput implements KeyListener {
-    public boolean upMove, downMove, leftMove, rightMove, diveRoll;
+    public boolean upMove, downMove, leftMove, rightMove, diveRoll, canDiveRoll;
     public int drt;
+    public int drot;
     public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_SHIFT && !diveRoll && canDiveRoll){
+            diveRoll = true;
+            drt = 0;
+        }
         switch (e.getKeyChar()) {
             case ('w'):
             case ('W'):
@@ -45,10 +50,6 @@ public class KeyInput implements KeyListener {
         }
     }
     public void keyTyped(KeyEvent e){
-        System.out.println("asdfoisf");
-        if (e.getKeyCode() == KeyEvent.VK_SHIFT){
-            diveRoll = true;
-            drt = 0;
-        }
+
     }
 }
