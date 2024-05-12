@@ -45,7 +45,7 @@ public class KeyInput implements KeyListener {
         }
     }
     public void keyTyped(KeyEvent e){
-        System.out.println("asdfaoisf");
+        System.out.println("asdfoisf");
         if (e.getKeyCode() == KeyEvent.VK_SHIFT){
             diveRoll = true;
             drt = 0;
