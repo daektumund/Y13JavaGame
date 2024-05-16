@@ -3,16 +3,11 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.lang.Object;
 public class Canvas extends JFrame{
     KeyInput keyInput = new KeyInput();
-    int playerX = 5;
-    int playerY= 5;
-    int playerW = 35;
-    int playerH = 35;
-    int playerSpeedX = 4;
-    int playerSpeedY = 4;
-    int playerLevel;
-    int currentFloor = 0;
+    Player player = new Player();
+    public int currentFloor = 0;
     boolean playerMoving = false;
     ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
     public Canvas(){
@@ -25,9 +20,10 @@ public class Canvas extends JFrame{
         this.setContentPane(new Panel());
         this.addKeyListener(keyInput);
         obstacles.add(new Obstacle(600,60,100,100,0,0,"staircaseup"));
-        obstacles.add(new Obstacle(400,60,100,100,1,0,"staircaseup"));
+        obstacles.add(new Obstacle(600,60,100,100,1,0,"staircaseup"));
         obstacles.add(new Obstacle(600,60,100,100,-1,0,"staircaseup"));
         obstacles.add(new Obstacle(600,300,100,100,0,0,"staircasedown"));
+        obstacles.add(new Obstacle(600,60,100,100,2,0,"staircasedown"));
         obstacles.add(new Obstacle(600,900,100,100,1,0,"staircasedown"));
         obstacles.add(new Obstacle(600,600,100,100,0,0,"table"));
     }
@@ -35,7 +31,6 @@ public class Canvas extends JFrame{
         public void paint(Graphics g) {
             super.paint(g);
             Graphics2D g2 = (Graphics2D) g;
-            g2.fillRect(playerX, playerY, playerW, playerH);
             g2.drawString(Integer.toString(currentFloor), 10, 10);
             g2.setColor(Color.blue);
             for (int x=0; x<obstacles.size(); x++){
@@ -56,45 +51,53 @@ public class Canvas extends JFrame{
                     }
                 }
             }
+            g2.setColor(Color.black);
+            g2.fillRect(player.playerX, player.playerY, player.playerW, player.playerH);
         }
     }
     public void movePlayer(){
         if (keyInput.upMove){
-            playerY -= playerSpeedY;
+            player.playerY -= player.playerSpeedY;
         }
         if (keyInput.downMove){
-            playerY += playerSpeedY;
+            player.playerY += player.playerSpeedY;
         }
         if (keyInput.leftMove){
-            playerX -= playerSpeedX;
+            player.playerX -= player.playerSpeedX;
         }
         if (keyInput.rightMove){
-            playerX += playerSpeedX;
+            player.playerX += player.playerSpeedX;
         }
     }
     public void loop(){
         movePlayer();
         repaint();
         if (keyInput.diveRoll){
-            playerSpeedX = 12;
-            playerSpeedY = 12;
+            player.playerSpeedX = 12;
+            player.playerSpeedY = 12;
         } else {
-            playerSpeedX = 4;
-            playerSpeedY = 4;
+            player.playerSpeedX = 4;
+            player.playerSpeedY = 4;
         }
         for (int x=0; x<obstacles.size(); x++) {
             Obstacle current = obstacles.get(x);
-            if (collision(playerX, playerY, playerW, playerH, current.xPosition, current.yPosition, current.width, current.height, current.floor)) {
-                switch(current.type) {
-                    case("staircaseup"):
-                        currentFloor++;
-                        break;
-                    case("staircasedown"):
-                        currentFloor--;
-                        break;
-                    case("table"):
-                        break;
+            if (collision(player.playerX, player.playerY, player.playerW, player.playerH, current.xPosition, current.yPosition, current.width, current.height, current.floor)) {
+                current.touched = true;
+                if (keyInput.interact) {
+                    switch (current.type) {
+                        case ("staircaseup"):
+                            currentFloor++;
+                            break;
+                        case ("staircasedown"):
+                            currentFloor--;
+                            break;
+                        case ("table"):
+                            break;
+                    }
+                    keyInput.interact = false;
                 }
+            } else {
+                current.touched = false;
             }
         }
     }

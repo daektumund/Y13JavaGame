@@ -6,6 +6,7 @@ public class Obstacle {
     public int floor;
     public int radius;
     public String type;
+    public boolean touched;
     public Obstacle(int x, int y, int l, int w, int f, int r, String t){
         this.xPosition = x;
         this.yPosition = y;
@@ -14,5 +15,6 @@ public class Obstacle {
         this.floor = f;
         this.radius = r;
         this.type = t;
+        this.touched = false;
     }
 }

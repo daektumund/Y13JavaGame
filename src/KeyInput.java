@@ -2,7 +2,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyInput implements KeyListener {
-    public boolean upMove, downMove, leftMove, rightMove, diveRoll, canDiveRoll;
+    public boolean upMove, downMove, leftMove, rightMove, diveRoll, canDiveRoll, interact;
     public int drt;
     public int drot;
     public void keyPressed(KeyEvent e) {
@@ -27,6 +27,10 @@ public class KeyInput implements KeyListener {
             case ('D'):
                 rightMove = true;
                 break;
+            case ('e'):
+            case ('E'):
+                interact = true;
+                break;
         }
     }
     public void keyReleased(KeyEvent e){
@@ -46,6 +50,10 @@ public class KeyInput implements KeyListener {
             case ('d'):
             case ('D'):
                 rightMove = false;
+                break;
+            case ('e'):
+            case ('E'):
+                interact = false;
                 break;
         }
     }
