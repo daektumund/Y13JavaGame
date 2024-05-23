@@ -1,4 +1,4 @@
-import java.security.Key;
+import java.util.ArrayList;
 
 public class Player {
     public int playerX = 5;
@@ -9,6 +9,8 @@ public class Player {
     public int playerSpeedY = 4;
     public int playerLevel;
     KeyInput keyInput = new KeyInput();
+    MouseInput mouseInput = new MouseInput();
+    ArrayList<Bullet> bullets = new ArrayList<>();
     public void movePlayer(){
         if (keyInput.upMove){
             playerY -= playerSpeedY;
@@ -22,6 +24,9 @@ public class Player {
         if (keyInput.rightMove){
             playerX += playerSpeedX;
         }
+    }
+    public void shoot(){
+        bullets.add(new Bullet(playerX,playerY,5,5));
     }
     public Player(){
 

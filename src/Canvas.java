@@ -1,9 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.lang.Object;
+import java.awt.geom.AffineTransform;
 public class Canvas extends JFrame{
     KeyInput keyInput = new KeyInput();
     MouseInput mouseInput = new MouseInput();
@@ -55,8 +53,13 @@ public class Canvas extends JFrame{
                 }
             }
             g2.setColor(Color.black);
-            g2.rotate(angle);
-            g2.fillRect(player.playerX, player.playerY, player.playerW, player.playerH);
+            Rectangle playerRect = new Rectangle(player.playerX, player.playerY, player.playerW, player.playerH);
+            g2.rotate(angle, player.playerX + (double) player.playerW /2, player.playerY + (double) player.playerH /2);
+            g2.draw(playerRect);
+            g2.fill(playerRect);
+            for (int x=0; x<player.bullets.size(); x++){
+                g2.fillRect(player.bullets.get(x).xPosition, player.bullets.get(x).yPosition, player.bullets.get(x).width, player.bullets.get(x).height);
+            }
         }
     }
     public void movePlayer(){
@@ -76,8 +79,11 @@ public class Canvas extends JFrame{
     public void loop(){
         movePlayer();
         repaint();
+        if (mouseInput.clicking){
+            player.shoot();
+        }
         point = MouseInfo.getPointerInfo().getLocation();
-        angle = (Math.toRadians(Math.atan(Math.abs(player.playerY - point.getY())/(Math.abs(player.playerX - point.getX())))));
+        angle = (Math.atan((player.playerY - point.getY())/(player.playerX - point.getX())));
         if (keyInput.diveRoll){
             player.playerSpeedX = 12;
             player.playerSpeedY = 12;
