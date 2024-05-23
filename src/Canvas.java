@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.lang.Object;
 public class Canvas extends JFrame{
     KeyInput keyInput = new KeyInput();
+    MouseInput mouseInput = new MouseInput();
     Player player = new Player();
     public int currentFloor = 0;
     boolean playerMoving = false;
+    Point point;
+    double angle = 0;
     ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
     public Canvas(){
         this.setTitle("Poot Boot");
@@ -52,6 +55,7 @@ public class Canvas extends JFrame{
                 }
             }
             g2.setColor(Color.black);
+            g2.rotate(angle);
             g2.fillRect(player.playerX, player.playerY, player.playerW, player.playerH);
         }
     }
@@ -72,6 +76,8 @@ public class Canvas extends JFrame{
     public void loop(){
         movePlayer();
         repaint();
+        point = MouseInfo.getPointerInfo().getLocation();
+        angle = (Math.toRadians(Math.atan(Math.abs(player.playerY - point.getY())/(Math.abs(player.playerX - point.getX())))));
         if (keyInput.diveRoll){
             player.playerSpeedX = 12;
             player.playerSpeedY = 12;
