@@ -11,7 +11,7 @@ public class Canvas extends JFrame{
     boolean playerMoving = false;
     ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
     public Canvas(){
-        this.setTitle("Poot Poot");
+        this.setTitle("Poot Boot");
         this.getContentPane().setPreferredSize(new Dimension(1000,980));
         this.getContentPane().setLayout(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
