@@ -11,6 +11,7 @@ public class Canvas extends JFrame{
     Point point;
     double angle = 0;
     ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
+    PointerInfo a = MouseInfo.getPointerInfo();
     public Canvas(){
         this.setTitle("Poot Boot");
         this.getContentPane().setPreferredSize(new Dimension(1000,980));
@@ -20,6 +21,7 @@ public class Canvas extends JFrame{
         this.pack();
         this.setContentPane(new Panel());
         this.addKeyListener(keyInput);
+        this.addMouseListener(mouseInput);
         obstacles.add(new Obstacle(600,60,100,100,0,0,"staircaseup"));
         obstacles.add(new Obstacle(600,60,100,100,1,0,"staircaseup"));
         obstacles.add(new Obstacle(600,60,100,100,-1,0,"staircaseup"));
@@ -54,11 +56,14 @@ public class Canvas extends JFrame{
             }
             g2.setColor(Color.black);
             Rectangle playerRect = new Rectangle(player.playerX, player.playerY, player.playerW, player.playerH);
+            AffineTransform original = new AffineTransform();
+            original = g2.getTransform();
             g2.rotate(angle, player.playerX + (double) player.playerW /2, player.playerY + (double) player.playerH /2);
             g2.draw(playerRect);
             g2.fill(playerRect);
+            g2.setTransform(original);
             for (int x=0; x<player.bullets.size(); x++){
-                g2.fillRect(player.bullets.get(x).xPosition, player.bullets.get(x).yPosition, player.bullets.get(x).width, player.bullets.get(x).height);
+                g2.fillRect((int)player.bullets.get(x).xPosition, (int)player.bullets.get(x).yPosition, player.bullets.get(x).width, player.bullets.get(x).height);
             }
         }
     }
@@ -79,11 +84,16 @@ public class Canvas extends JFrame{
     public void loop(){
         movePlayer();
         repaint();
+        player.point = point;
+        for (int x=0; x<player.bullets.size(); x++){
+            player.bullets.get(x).moveBullet();
+        }
         if (mouseInput.clicking){
             player.shoot();
         }
         point = MouseInfo.getPointerInfo().getLocation();
         angle = (Math.atan((player.playerY - point.getY())/(player.playerX - point.getX())));
+        player.angle = angle;
         if (keyInput.diveRoll){
             player.playerSpeedX = 12;
             player.playerSpeedY = 12;

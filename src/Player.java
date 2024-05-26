@@ -1,6 +1,10 @@
+import java.awt.*;
 import java.util.ArrayList;
 
-public class Player {
+public class Player{
+    Point point;
+    double angle;
+    PointerInfo a = MouseInfo.getPointerInfo();
     public int playerX = 5;
     public int playerY= 5;
     public int playerW = 35;
@@ -26,7 +30,9 @@ public class Player {
         }
     }
     public void shoot(){
-        bullets.add(new Bullet(playerX,playerY,5,5));
+        double xSpeed = Math.cos(angle)*10;
+        double ySpeed = Math.sin(angle)*10;
+        bullets.add(new Bullet(playerX,playerY,5,5, xSpeed, ySpeed));
     }
     public Player(){
 

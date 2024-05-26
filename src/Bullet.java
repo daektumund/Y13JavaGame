@@ -1,17 +1,20 @@
 public class Bullet extends Player {
-    public int xPosition;
-    public int yPosition;
+    public double xPosition;
+    public double yPosition;
     public int width;
     public int height;
-    public Bullet(int x, int y, int w, int h){
+    public double xSpeed;
+    public double ySpeed;
+    public Bullet(int x, int y, int w, int h, double xs, double ys){
         this.xPosition = x;
         this.yPosition = y;
         this.width = w;
         this.height = h;
+        this.xSpeed = xs;
+        this.ySpeed = ys;
     }
     public void moveBullet(){
-        for (int x=0; x<bullets.size(); x++){
-            bullets.get(x).xPosition += 0.1;
-        }
+        this.xPosition += xSpeed;
+        this.yPosition += ySpeed;
     }
 }
