@@ -32,7 +32,11 @@ public class Player{
     public void shoot(){
         double xSpeed = Math.cos(angle)*10;
         double ySpeed = Math.sin(angle)*10;
-        bullets.add(new Bullet(playerX,playerY,5,5, xSpeed, ySpeed));
+        if (point.getX() < playerX){
+            xSpeed = -xSpeed;
+            ySpeed = -ySpeed;
+        }
+        bullets.add(new Bullet(playerX + playerW/2,playerY + playerH/2,5,5, xSpeed, ySpeed));
     }
     public Player(){
 

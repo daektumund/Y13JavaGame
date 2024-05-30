@@ -87,6 +87,11 @@ public class Canvas extends JFrame{
         player.point = point;
         for (int x=0; x<player.bullets.size(); x++){
             player.bullets.get(x).moveBullet();
+            for (int y=0; y<obstacles.size(); y++) {
+                if (player.bullets.get(x).collisionBullet(obstacles.get(y).xPosition,obstacles.get(y).yPosition,obstacles.get(y).width,obstacles.get(y).height,currentFloor)) {
+                    player.bullets.remove(x);
+                }
+            }
         }
         if (mouseInput.clicking){
             player.shoot();
