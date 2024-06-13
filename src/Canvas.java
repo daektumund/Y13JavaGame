@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Arc2D;
 import java.util.ArrayList;
 import java.awt.geom.AffineTransform;
 public class Canvas extends JFrame{
@@ -13,6 +14,7 @@ public class Canvas extends JFrame{
     ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
     ArrayList<Enemy> enemies = new ArrayList<Enemy>();
     PointerInfo a = MouseInfo.getPointerInfo();
+    int testCounter = 0;
     public Canvas(){
         this.setTitle("Loot b-oot");
         this.getContentPane().setPreferredSize(new Dimension(1000,980));
@@ -30,7 +32,7 @@ public class Canvas extends JFrame{
         obstacles.add(new Obstacle(600,60,100,100,2,0,"staircasedown"));
         obstacles.add(new Obstacle(600,900,100,100,1,0,"staircasedown"));
         obstacles.add(new Obstacle(600,600,100,100,0,0,"table"));
-        enemies.add(new Enemy(300,600,50,50,0,"enemy 1"));
+        enemies.add(new Enemy(300,600,40,40,0,"enemy 1"));
     }
     class Panel extends JPanel {
         public void paint(Graphics g) {
@@ -56,28 +58,41 @@ public class Canvas extends JFrame{
                     }
                 }
             }
-            for (int x=0; x<enemies.size(); x++){
-                Enemy current = enemies.get(x);
-                if (current.health <= 0){
-                    enemies.remove(x);
-                }
-                if (current.floor == currentFloor) {
-                    g2.fillRect(current.xPosition, current.yPosition, current.width, current.height);
-                    g2.setColor(Color.black);
-                    g2.drawString(current.name, current.xPosition, current.yPosition);
-                    g2.drawString(Integer.toString(current.health), current.xPosition, current.yPosition-10);
-                }
-            }
             g2.setColor(Color.black);
             Rectangle playerRect = new Rectangle(player.playerX, player.playerY, player.playerW, player.playerH);
             AffineTransform original = new AffineTransform();
             original = g2.getTransform();
-            g2.rotate(angle, player.playerX + (double) player.playerW /2, player.playerY + (double) player.playerH /2);
+            g2.rotate(angle, player.playerX + (double) player.playerW/2, player.playerY + (double) player.playerH/2);
             g2.draw(playerRect);
             g2.fill(playerRect);
             g2.setTransform(original);
             for (int x=0; x<player.bullets.size(); x++){
                 g2.fillRect((int)player.bullets.get(x).xPosition, (int)player.bullets.get(x).yPosition, player.bullets.get(x).width, player.bullets.get(x).height);
+            }
+            for (int x=0; x<enemies.size(); x++){
+                Enemy current = enemies.get(x);
+                testCounter++;
+                if (testCounter >= 0.2){
+                    current.angle = Math.toRadians(Math.toDegrees(current.angle)+ 1);
+                    testCounter = 0;
+                }
+                current.arc = new Arc2D.Double((double)(current.xPosition - current.vdist/2 + current.width/2),(double)(current.yPosition - current.vdist/2 + current.height/2),(double)(current.vdist),(double)(current.vdist),(double)(Math.toDegrees(-current.angle)-current.fov/2),(double)(current.fov),Arc2D.PIE);
+                g2.draw(current.arc);
+                if (current.arc.intersects(playerRect)){
+                    System.out.println("wow");
+                }
+                    if (current.health <= 0){
+                        enemies.remove(x);
+                    }
+                if (current.floor == currentFloor) {
+                    original = g2.getTransform();
+                    g2.rotate(current.angle, current.xPosition + (double) current.width/2, current.yPosition + (double) current.height/2);
+                    g2.fillRect(current.xPosition, current.yPosition, current.width, current.height);
+                    g2.setColor(Color.black);
+                    g2.drawString(current.name, current.xPosition, current.yPosition);
+                    g2.drawString(Integer.toString(current.health), current.xPosition, current.yPosition-10);
+                    g2.setTransform(original);
+                }
             }
         }
     }
