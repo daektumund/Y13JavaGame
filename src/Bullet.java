@@ -21,9 +21,6 @@ public class Bullet extends Player {
         }
     }
     public boolean collisionBullet(double x,double y,int w,int h,int floor1,int floor2){
-        if (Canvas.collision((int)this.xPosition,(int)this.yPosition,this.width,this.height,(int)x,(int)y,w,h, floor1, floor2)){
-            return true;
-        }
-        else return false;
+        return Canvas.collision((int) this.xPosition, (int) this.yPosition, this.width, this.height, (int) x, (int) y, w, h, floor1, floor2);
     }
 }

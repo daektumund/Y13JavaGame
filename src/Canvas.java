@@ -32,7 +32,7 @@ public class Canvas extends JFrame{
         obstacles.add(new Obstacle(600,60,100,100,2,0,"staircasedown"));
         obstacles.add(new Obstacle(600,900,100,100,1,0,"staircasedown"));
         obstacles.add(new Obstacle(600,600,100,100,0,0,"table"));
-        enemies.add(new Enemy(300,600,40,40,0,"enemy 1"));
+        enemies.add(new Enemy(300,600,40,40,0,"enemy 1", new int[]{30,600,600,500,200,20}));
     }
     class Panel extends JPanel {
         public void paint(Graphics g) {
@@ -70,21 +70,26 @@ public class Canvas extends JFrame{
                 g2.fillRect((int)player.bullets.get(x).xPosition, (int)player.bullets.get(x).yPosition, player.bullets.get(x).width, player.bullets.get(x).height);
             }
             for (int x=0; x<enemies.size(); x++){
+                enemies.get(x).Patrol(player.playerX,player.playerY);
                 Enemy current = enemies.get(x);
-                testCounter++;
+                /*testCounter++;
                 if (testCounter >= 0.2){
                     current.angle = Math.toRadians(Math.toDegrees(current.angle)+ 1);
                     testCounter = 0;
-                }
-                current.arc = new Arc2D.Double((double)(current.xPosition - current.vdist/2 + current.width/2),(double)(current.yPosition - current.vdist/2 + current.height/2),(double)(current.vdist),(double)(current.vdist),(double)(Math.toDegrees(-current.angle)-current.fov/2),(double)(current.fov),Arc2D.PIE);
-                g2.draw(current.arc);
-                if (current.arc.intersects(playerRect)){
-                    System.out.println("wow");
-                }
+                }*/
                     if (current.health <= 0){
                         enemies.remove(x);
                     }
                 if (current.floor == currentFloor) {
+                    current.arc = new Arc2D.Double((double)(current.xPosition - current.vDist/2 + current.width/2),(double)(current.yPosition - current.vDist/2 + current.height/2),(double)(current.vDist),(double)(current.vDist),(double)(Math.toDegrees(-current.angle)-current.fov/2),(double)(current.fov),Arc2D.PIE);
+                    if (current.alert){
+                        g2.setColor(Color.RED);
+                    }
+                    g2.draw(current.arc);
+                    g2.setColor(Color.BLACK);
+                    if (current.arc.intersects(playerRect)){
+                        current.alert = true;
+                    }
                     original = g2.getTransform();
                     g2.rotate(current.angle, current.xPosition + (double) current.width/2, current.yPosition + (double) current.height/2);
                     g2.fillRect(current.xPosition, current.yPosition, current.width, current.height);
@@ -111,7 +116,9 @@ public class Canvas extends JFrame{
         }
     }
     public void loop(){
-        movePlayer();
+        if (player.playerHealth != 0){
+            movePlayer();
+        }
         repaint();
         player.point = point;
         for (int x=0; x<player.bullets.size(); x++){
@@ -122,7 +129,7 @@ public class Canvas extends JFrame{
                             player.bullets.remove(x);
                         }
                     } catch(Exception e) {
-                        System.out.println("shit");
+
                     }
                 }
                 for (int y=0; y<enemies.size(); y++) {
@@ -132,7 +139,7 @@ public class Canvas extends JFrame{
                             enemies.get(y).health --;
                         }
                     } catch(Exception e) {
-                        System.out.println("shit");
+
                     }
                 }
             }

@@ -11,32 +11,21 @@ public class Player{
     public int playerH = 35;
     public int playerSpeedX = 4;
     public int playerSpeedY = 4;
-    public int playerLevel;
-    KeyInput keyInput = new KeyInput();
-    MouseInput mouseInput = new MouseInput();
+    public int playerHealth = 100;
+    public boolean canShoot = false;
+    public int shotTimer = 0;
     ArrayList<Bullet> bullets = new ArrayList<>();
-    public void movePlayer(){
-        if (keyInput.upMove){
-            playerY -= playerSpeedY;
-        }
-        if (keyInput.downMove){
-            playerY += playerSpeedY;
-        }
-        if (keyInput.leftMove){
-            playerX -= playerSpeedX;
-        }
-        if (keyInput.rightMove){
-            playerX += playerSpeedX;
-        }
-    }
     public void shoot(){
-        double xSpeed = Math.cos(angle)*20;
-        double ySpeed = Math.sin(angle)*20;
-        if (point.getX() < playerX){
-            xSpeed = -xSpeed;
-            ySpeed = -ySpeed;
+        if (this.canShoot) {
+            double xSpeed = Math.cos(angle) * 50;
+            double ySpeed = Math.sin(angle) * 50;
+            if (point.getX() < playerX) {
+                xSpeed = -xSpeed;
+                ySpeed = -ySpeed;
+            }
+            bullets.add(new Bullet(playerX + playerW / 2, playerY + playerH / 2, 5, 5, xSpeed, ySpeed));
+            this.canShoot = false;
         }
-        bullets.add(new Bullet(playerX + playerW/2,playerY + playerH/2,5,5, xSpeed, ySpeed));
     }
     public Player(){
 

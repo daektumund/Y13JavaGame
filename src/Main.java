@@ -23,6 +23,12 @@ public class Main extends Thread{
                 if (canvas.keyInput.drot == 80){
                     canvas.keyInput.canDiveRoll = true;
                 }
+                if (!canvas.player.canShoot){
+                    canvas.player.shotTimer++;
+                }
+                if (canvas.player.shotTimer >= 30){
+                    canvas.player.canShoot = true;
+                }
             }
         }
         catch(Exception e){
