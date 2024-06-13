@@ -11,9 +11,10 @@ public class Canvas extends JFrame{
     Point point;
     double angle = 0;
     ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
+    ArrayList<Enemy> enemies = new ArrayList<Enemy>();
     PointerInfo a = MouseInfo.getPointerInfo();
     public Canvas(){
-        this.setTitle("Poot Boot");
+        this.setTitle("Loot b-oot");
         this.getContentPane().setPreferredSize(new Dimension(1000,980));
         this.getContentPane().setLayout(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -29,6 +30,7 @@ public class Canvas extends JFrame{
         obstacles.add(new Obstacle(600,60,100,100,2,0,"staircasedown"));
         obstacles.add(new Obstacle(600,900,100,100,1,0,"staircasedown"));
         obstacles.add(new Obstacle(600,600,100,100,0,0,"table"));
+        enemies.add(new Enemy(300,600,50,50,0,"enemy 1"));
     }
     class Panel extends JPanel {
         public void paint(Graphics g) {
@@ -52,6 +54,18 @@ public class Canvas extends JFrame{
                             g2.drawString("table", current.xPosition, current.yPosition);
                             break;
                     }
+                }
+            }
+            for (int x=0; x<enemies.size(); x++){
+                Enemy current = enemies.get(x);
+                if (current.health <= 0){
+                    enemies.remove(x);
+                }
+                if (current.floor == currentFloor) {
+                    g2.fillRect(current.xPosition, current.yPosition, current.width, current.height);
+                    g2.setColor(Color.black);
+                    g2.drawString(current.name, current.xPosition, current.yPosition);
+                    g2.drawString(Integer.toString(current.health), current.xPosition, current.yPosition-10);
                 }
             }
             g2.setColor(Color.black);
@@ -88,11 +102,25 @@ public class Canvas extends JFrame{
         for (int x=0; x<player.bullets.size(); x++){
             player.bullets.get(x).moveBullet();
             for (int y=0; y<obstacles.size(); y++) {
-                if (player.bullets.get(x).collisionBullet(obstacles.get(y).xPosition,obstacles.get(y).yPosition,obstacles.get(y).width,obstacles.get(y).height,currentFloor)) {
-                    player.bullets.remove(x);
+                    try {
+                        if (player.bullets.get(x).collisionBullet(obstacles.get(y).xPosition,obstacles.get(y).yPosition,obstacles.get(y).width,obstacles.get(y).height,currentFloor,obstacles.get(y).floor)) {
+                            player.bullets.remove(x);
+                        }
+                    } catch(Exception e) {
+                        System.out.println("shit");
+                    }
+                }
+                for (int y=0; y<enemies.size(); y++) {
+                    try {
+                        if (player.bullets.get(x).collisionBullet(enemies.get(y).xPosition,enemies.get(y).yPosition,enemies.get(y).width,enemies.get(y).height,currentFloor,enemies.get(y).floor)) {
+                            player.bullets.remove(x);
+                            enemies.get(y).health --;
+                        }
+                    } catch(Exception e) {
+                        System.out.println("shit");
+                    }
                 }
             }
-        }
         if (mouseInput.clicking){
             player.shoot();
         }
@@ -108,7 +136,7 @@ public class Canvas extends JFrame{
         }
         for (int x=0; x<obstacles.size(); x++) {
             Obstacle current = obstacles.get(x);
-            if (collision(player.playerX, player.playerY, player.playerW, player.playerH, current.xPosition, current.yPosition, current.width, current.height, current.floor)) {
+            if (collision(player.playerX, player.playerY, player.playerW, player.playerH, current.xPosition, current.yPosition, current.width, current.height, current.floor, currentFloor)) {
                 current.touched = true;
                 if (keyInput.interact) {
                     switch (current.type) {
@@ -128,8 +156,8 @@ public class Canvas extends JFrame{
             }
         }
     }
-    public Boolean collision(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2, int floor){
-        if (x1 + w1 >= x2 && x1 <= x2 + w2 && y1 + h1 >= y2 && y1 <= y2 + h2 && floor == currentFloor){
+    public static Boolean collision(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2, int floor1, int floor2){
+        if (x1 + w1 >= x2 && x1 <= x2 + w2 && y1 + h1 >= y2 && y1 <= y2 + h2 && floor1 == floor2){
             return true;
         } else {
             return false;

@@ -30,8 +30,8 @@ public class Player{
         }
     }
     public void shoot(){
-        double xSpeed = Math.cos(angle)*10;
-        double ySpeed = Math.sin(angle)*10;
+        double xSpeed = Math.cos(angle)*20;
+        double ySpeed = Math.sin(angle)*20;
         if (point.getX() < playerX){
             xSpeed = -xSpeed;
             ySpeed = -ySpeed;

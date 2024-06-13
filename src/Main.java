@@ -26,8 +26,7 @@ public class Main extends Thread{
             }
         }
         catch(Exception e){
-            System.out.println("Error");
+            System.out.println("Error!");
         }
-        System.out.println("Loop!");
     }
 }

@@ -16,18 +16,14 @@ public class Bullet extends Player {
     public void moveBullet(){
         this.xPosition += xSpeed;
         this.yPosition += ySpeed;
+        if (this.xPosition < 0 || this.yPosition < 0 || this.xPosition > 1000 || this.yPosition > 980){
+            bullets.remove(this);
+        }
     }
-    public boolean collisionBullet(double x,double y,int w,int h,int floor){
-        if (collision((int)this.xPosition,(int)this.yPosition,this.width,this.height,(int)x,(int)y,w,h)){
+    public boolean collisionBullet(double x,double y,int w,int h,int floor1,int floor2){
+        if (Canvas.collision((int)this.xPosition,(int)this.yPosition,this.width,this.height,(int)x,(int)y,w,h, floor1, floor2)){
             return true;
         }
         else return false;
-    }
-    public Boolean collision(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2){
-        if (x1 + w1 >= x2 && x1 <= x2 + w2 && y1 + h1 >= y2 && y1 <= y2 + h2){
-            return true;
-        } else {
-            return false;
-        }
     }
 }
