@@ -70,8 +70,11 @@ public class Canvas extends JFrame{
                 g2.fillRect((int)player.bullets.get(x).xPosition, (int)player.bullets.get(x).yPosition, player.bullets.get(x).width, player.bullets.get(x).height);
             }
             for (int x=0; x<enemies.size(); x++){
-                enemies.get(x).Patrol(player.playerX,player.playerY);
                 Enemy current = enemies.get(x);
+                current.Patrol(player.playerX,player.playerY);
+                if (collision(player.playerX,player.playerY,player.playerW,player.playerH,current.xPosition,current.yPosition,current.width,current.height,currentFloor,current.floor)){
+                    player.playerHealth = 0;
+                }
                 /*testCounter++;
                 if (testCounter >= 0.2){
                     current.angle = Math.toRadians(Math.toDegrees(current.angle)+ 1);
