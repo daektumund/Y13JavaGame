@@ -3,6 +3,9 @@ import java.awt.*;
 import java.awt.geom.Arc2D;
 import java.util.ArrayList;
 import java.awt.geom.AffineTransform;
+import java.awt.image.*;
+import javax.imageio.*;
+import java.io.*;
 public class Canvas extends JFrame{
     KeyInput keyInput = new KeyInput();
     MouseInput mouseInput = new MouseInput();
@@ -15,6 +18,7 @@ public class Canvas extends JFrame{
     ArrayList<Enemy> enemies = new ArrayList<Enemy>();
     PointerInfo a = MouseInfo.getPointerInfo();
     int testCounter = 0;
+    final BufferedImage SHOOTERIMAGE = ImageIO.read(new File("H:\\CSC335\\Year13 Java Game\\Shooter.png"));
     public Canvas(){
         this.setTitle("Loot b-oot");
         this.getContentPane().setPreferredSize(new Dimension(1000,980));
@@ -63,8 +67,7 @@ public class Canvas extends JFrame{
             AffineTransform original = new AffineTransform();
             original = g2.getTransform();
             g2.rotate(angle, player.playerX + (double) player.playerW/2, player.playerY + (double) player.playerH/2);
-            g2.draw(playerRect);
-            g2.fill(playerRect);
+            g2.drawImage(SHOOTERIMAGE, player.playerX, player.playerY, ,50);
             g2.setTransform(original);
             for (int x=0; x<player.bullets.size(); x++){
                 g2.fillRect((int)player.bullets.get(x).xPosition, (int)player.bullets.get(x).yPosition, player.bullets.get(x).width, player.bullets.get(x).height);

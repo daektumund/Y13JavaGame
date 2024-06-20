@@ -12,13 +12,13 @@ public class Player{
     public int playerSpeedX = 4;
     public int playerSpeedY = 4;
     public int playerHealth = 100;
-    public boolean canShoot = false;
+    public boolean canShoot = true;
     public int shotTimer = 0;
     ArrayList<Bullet> bullets = new ArrayList<>();
     public void shoot(){
         if (this.canShoot) {
-            double xSpeed = Math.cos(angle) * 50;
-            double ySpeed = Math.sin(angle) * 50;
+            double xSpeed = Math.cos(angle) * 100;
+            double ySpeed = Math.sin(angle) * 100;
             if (point.getX() < playerX) {
                 xSpeed = -xSpeed;
                 ySpeed = -ySpeed;

@@ -25,9 +25,10 @@ public class Main extends Thread{
                 }
                 if (!canvas.player.canShoot){
                     canvas.player.shotTimer++;
-                }
-                if (canvas.player.shotTimer >= 30){
-                    canvas.player.canShoot = true;
+                    if (canvas.player.shotTimer >= 80){
+                        canvas.player.canShoot = true;
+                        canvas.player.shotTimer = 0;
+                    }
                 }
             }
         }
